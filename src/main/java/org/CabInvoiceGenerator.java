@@ -5,6 +5,8 @@ public class CabInvoiceGenerator {
     private static final int COST_PER_TIME = 1;
     private static final double MINIMUM_FARE = 5;
 
+    RideRepository rideRepository = new RideRepository();
+
     public double calculateFare(double distance, int time) {
         double totalFare = distance * MINIMUM_COST_PER_KILOMETER + time * COST_PER_TIME;
         if(totalFare < MINIMUM_FARE)
@@ -18,5 +20,13 @@ public class CabInvoiceGenerator {
             totalFare += this.calculateFare(ride.distance, ride.time);
         }
         return new InvoiceSummary(rides.length, totalFare);
+    }
+
+    public void addRides(Integer userId, Ride[] rides) {
+        rideRepository.addRides(userId, rides);
+    }
+
+    public InvoiceSummary getRides(Integer userId) {
+        return this.calculateFare(rideRepository.getRides(userId));
     }
 }
